@@ -19,20 +19,20 @@ class CardWidget extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
-      color: theme.colorScheme.surface,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Hero(
-                tag: character.name,
+            Hero(
+              tag: character.name,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
                 child: Image.network(
                   character.image,
                   width: 120,
                   height: 120,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

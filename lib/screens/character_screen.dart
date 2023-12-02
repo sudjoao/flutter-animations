@@ -89,13 +89,15 @@ class _CharacterScreenState extends State<CharacterScreen>
                 const SizedBox(
                   height: 24,
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Hero(
-                    tag: character.name,
+                Hero(
+                  tag: character.name,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(32),
                     child: Image.network(
                       character.image,
                       height: MediaQuery.of(context).size.height * 0.4,
+                      width: MediaQuery.of(context).size.height * 0.4,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
