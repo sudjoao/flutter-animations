@@ -15,7 +15,9 @@ class CharacterScreen extends StatefulWidget {
 class _CharacterScreenState extends State<CharacterScreen> {
   late List<Character> characters = [];
 
-  void onPressed() {
+  @override
+  void initState() {
+    super.initState();
     MarvelService().getCharacters().then((List<Character> characters) {
       setState(() {
         this.characters = characters;
@@ -31,23 +33,21 @@ class _CharacterScreenState extends State<CharacterScreen> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CardWidget(title: 'Card Widget'),
-              CardWidget(title: 'Card Widget 2'),
-              TextButton(onPressed: onPressed, child: Text('Press me')),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: characters.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(characters[index].name),
-                    );
-                  },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: characters.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CardWidget(character: characters[index]);
+                    },
+                  ),
                 ),
-              ),
-            ]),
+              ]),
+        ),
       ),
     );
   }
