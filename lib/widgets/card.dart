@@ -22,25 +22,44 @@ class CardWidget extends StatelessWidget {
       color: theme.colorScheme.surface,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Hero(
                 tag: character.name,
-                child: Image.network(character.image),
+                child: Image.network(
+                  character.image,
+                  width: 120,
+                  height: 120,
+                ),
               ),
             ),
             const SizedBox(
-              height: 16,
+              width: 16,
             ),
-            Text(
-              character.name,
-              style: theme.textTheme.headlineMedium,
-              textAlign: TextAlign.left,
-            ),
-            Text(description())
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 220,
+                  child: Text(
+                    character.name,
+                    style: theme.textTheme.headlineMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(
+                  width: 220,
+                  child: Text(
+                    description(),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

@@ -1,54 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_animations/models/character.dart';
-import 'package:marvel_animations/services/marvel.dart';
-import 'package:marvel_animations/widgets/card.dart';
+
+class CharacterScreenArguments {
+  final Character character;
+
+  CharacterScreenArguments(this.character);
+}
 
 class CharacterScreen extends StatefulWidget {
-  const CharacterScreen({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const CharacterScreen({super.key});
 
   @override
   State<CharacterScreen> createState() => _CharacterScreenState();
 }
 
 class _CharacterScreenState extends State<CharacterScreen> {
-  late List<Character> characters = [];
-
-  @override
-  void initState() {
-    super.initState();
-    MarvelService().getCharacters().then((List<Character> characters) {
-      setState(() {
-        this.characters = characters;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final args =
+        ModalRoute.of(context)!.settings.arguments as CharacterScreenArguments;
+    final Character character = args.character;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text('Info'),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: characters.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CardWidget(character: characters[index]);
-                    },
-                  ),
+          child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              character.name,
+              style: theme.textTheme.headlineLarge,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Hero(
+                tag: character.name,
+                child: Image.network(
+                  character.image,
                 ),
-              ]),
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Text(
+              character.description,
+              style: theme.textTheme.bodyLarge,
+            ),
+          ],
         ),
-      ),
+      )),
     );
   }
 }

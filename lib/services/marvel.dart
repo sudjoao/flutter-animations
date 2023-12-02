@@ -18,8 +18,9 @@ class MarvelService {
 
   late Dio _dio;
 
-  Future<List<Character>> getCharacters() async {
-    final Response response = await _dio.get('/characters');
+  Future<List<Character>> getCharacters({Map<String, dynamic>? args}) async {
+    final Response response =
+        await _dio.get('/characters', queryParameters: args);
     final List<dynamic> results = response.data['data']['results'];
     return results.map((dynamic json) => Character.fromJson(json)).toList();
   }

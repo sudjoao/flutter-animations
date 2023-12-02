@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_animations/screens/character_screen.dart';
+import 'package:marvel_animations/utils/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
         useMaterial3: true,
       ),
-      home: const CharacterScreen(title: 'Marvel Characters'),
+      routes: routes,
     );
   }
 }
