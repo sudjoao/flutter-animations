@@ -14,7 +14,47 @@ class CharacterScreen extends StatefulWidget {
   State<CharacterScreen> createState() => _CharacterScreenState();
 }
 
-class _CharacterScreenState extends State<CharacterScreen> {
+class _CharacterScreenState extends State<CharacterScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  void restartAnimation() {
+    _controller.reset();
+    _controller.forward();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    // 2. Create Animation
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.decelerate,
+    );
+
+    // 3. Add listener to AnimationController
+    _controller.addListener(() {
+      setState(() {});
+    });
+
+    // 4. Start AnimationController
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    // 5. Dispose AnimationController
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -25,35 +65,55 @@ class _CharacterScreenState extends State<CharacterScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Info'),
+        actions: [
+          _animation.isCompleted
+              ? IconButton(
+                  onPressed: restartAnimation, icon: const Icon(Icons.replay))
+              : Container()
+        ],
       ),
       body: Center(
           child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Text(
-              character.name,
-              style: theme.textTheme.headlineLarge,
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Hero(
-                tag: character.name,
-                child: Image.network(
-                  character.image,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  character.name,
+                  style: theme.textTheme.headlineLarge,
+                  textAlign: TextAlign.center,
                 ),
+                const SizedBox(
+                  height: 24,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Hero(
+                    tag: character.name,
+                    child: Image.network(
+                      character.image,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+              ],
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.55,
+              left: (MediaQuery.of(context).size.width * _animation.value) -
+                  MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width - 32,
+              child: Text(
+                character.description,
+                style: theme.textTheme.bodyLarge,
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            Text(
-              character.description,
-              style: theme.textTheme.bodyLarge,
             ),
           ],
         ),
