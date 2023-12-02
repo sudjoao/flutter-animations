@@ -34,9 +34,14 @@ class _CharacterScreenState extends State<CharacterScreen>
     );
 
     // 2. Create Animation
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.decelerate,
+    _animation = Tween<double>(
+      begin: 1.0, // Posição inicial do texto fora da tela
+      end: 0.0, // Posição final do texto na tela
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut, // Escolha uma curva de animação
+      ),
     );
 
     // 3. Add listener to AnimationController
@@ -75,47 +80,46 @@ class _CharacterScreenState extends State<CharacterScreen>
       body: Center(
           child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          alignment: Alignment.center,
+        child: Column(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  character.name,
-                  style: theme.textTheme.headlineLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Hero(
-                  tag: character.name,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(32),
-                    child: Image.network(
-                      character.image,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      width: MediaQuery.of(context).size.height * 0.4,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-              ],
+            Text(
+              character.name,
+              style: theme.textTheme.headlineLarge,
+              textAlign: TextAlign.center,
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.55,
-              left: (MediaQuery.of(context).size.width * _animation.value) -
-                  MediaQuery.of(context).size.width,
-              width: MediaQuery.of(context).size.width - 32,
-              child: Text(
-                character.description,
-                style: theme.textTheme.bodyLarge,
-                textAlign: TextAlign.center,
+            const SizedBox(
+              height: 24,
+            ),
+            Hero(
+              tag: character.name,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                child: Image.network(
+                  character.image,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  width: MediaQuery.of(context).size.height * 0.4,
+                  fit: BoxFit.cover,
+                ),
               ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    0,
+                    _animation.value * MediaQuery.of(context).size.width,
+                  ),
+                  child: Text(
+                    character.description,
+                    style: theme.textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
             ),
           ],
         ),
