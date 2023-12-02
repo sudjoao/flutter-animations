@@ -6,12 +6,6 @@ class CardWidget extends StatelessWidget {
 
   final Character character;
 
-  String description() {
-    return character.description.isNotEmpty
-        ? character.description
-        : "No description";
-  }
-
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -54,7 +48,7 @@ class CardWidget extends StatelessWidget {
                 SizedBox(
                   width: 220,
                   child: Text(
-                    description(),
+                    character.description,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

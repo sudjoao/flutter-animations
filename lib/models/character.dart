@@ -12,9 +12,11 @@ class Character {
   });
 
   factory Character.fromJson(Map<String, dynamic> json) {
+    String description =
+        json['description'].isNotEmpty ? json['description'] : 'No description';
     return Character(
       name: json['name'] as String,
-      description: json['description'] as String,
+      description: description,
       image: json['thumbnail']['path'] + '.' + json['thumbnail']['extension'],
       id: json['id'] as int,
     );
