@@ -82,23 +82,37 @@ class _CharacterScreenState extends State<CharacterScreen>
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
-              character.name,
-              style: theme.textTheme.headlineLarge,
-              textAlign: TextAlign.center,
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    _animation.value * MediaQuery.of(context).size.width,
+                    0,
+                  ),
+                  child: Text(
+                    character.name,
+                    style: theme.textTheme.headlineLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
             ),
             const SizedBox(
               height: 24,
             ),
             Hero(
-              tag: character.name,
+              tag: "${character.name}${character.id}",
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(32),
-                child: Image.network(
-                  character.image,
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.height * 0.4,
-                  fit: BoxFit.cover,
+                child: Opacity(
+                  opacity: 1 - (_animation.value * 0.15),
+                  child: Image.network(
+                    character.image,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.height * 0.4,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -110,8 +124,8 @@ class _CharacterScreenState extends State<CharacterScreen>
               builder: (context, child) {
                 return Transform.translate(
                   offset: Offset(
+                    -_animation.value * MediaQuery.of(context).size.width,
                     0,
-                    _animation.value * MediaQuery.of(context).size.width,
                   ),
                   child: Text(
                     character.description,

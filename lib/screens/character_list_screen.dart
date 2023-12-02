@@ -44,7 +44,7 @@ class _CharacterListScreenState extends State<CharacterListScreen> {
           isLoading = true;
         });
         MarvelService().getCharacters(args: {
-          'series': 2258,
+          'series': 2258, //only xmen characters
           'offset': characters.length
         }).then((List<Character> characters) {
           setState(() {

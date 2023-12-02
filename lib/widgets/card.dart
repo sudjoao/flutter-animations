@@ -19,7 +19,7 @@ class CardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Hero(
-              tag: character.name,
+              tag: "${character.name}${character.id}",
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
